@@ -11,6 +11,7 @@ import '../widgets/todo_item.dart';
 - send selected item to the bottom
 - allow to hide selected item
 - change picture
+- at the begining after clearing search, three empty boxes
 */
 
 class Home extends StatefulWidget {
