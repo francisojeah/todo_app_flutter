@@ -27,12 +27,12 @@ class ToDoItem extends StatelessWidget {
         tileColor: Colors.white,
         leading: Icon(
             todo.isDone ? Icons.check_box : Icons.check_box_outline_blank,
-            color: tdBlue),
+            color: Colors.black),
         title: Text(
           todo.todoText!,
           style: TextStyle(
-            color: tdBlack,
-            fontSize: 16,
+            color: todo.isDone ? Colors.grey : tdBlack,
+            fontSize: 17,
             decoration: todo.isDone ? TextDecoration.lineThrough : null,
           ),
         ),
@@ -41,6 +41,7 @@ class ToDoItem extends StatelessWidget {
             onPressed: (() {
               onDeleteItem(todo.id);
             }),
+            iconSize: 27,
             color: tdRed),
         // Container(
         // padding: EdgeInsects.all(0),

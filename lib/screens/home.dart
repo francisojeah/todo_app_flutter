@@ -35,7 +35,8 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: tdBGColor,
+      // backgroundColor: tdBGColor,
+      backgroundColor: Color.fromARGB(255, 243, 243, 243),
       appBar: _buildAppBar(),
       body: Stack(
         children: [
@@ -47,14 +48,15 @@ class _HomeState extends State<Home> {
                 Expanded(
                     child: ListView(
                   children: [
-                    Container(
-                      margin: EdgeInsets.only(top: 50, bottom: 20),
-                      child: Text(
-                        'All ToDos',
-                        style: TextStyle(
-                            fontSize: 30, fontWeight: FontWeight.w500),
-                      ),
-                    ),
+                    // Container(
+                    //   alignment: Alignment.center,
+                    //   margin: EdgeInsets.only(top: 50, bottom: 20),
+                    //   child: Text(
+                    //     'Todo List',
+                    //     style: TextStyle(
+                    //         fontSize: 30, fontWeight: FontWeight.w500),
+                    //   ),
+                    // ),
                     for (ToDo todoo in _filteredTDList.reversed)
                       ToDoItem(
                         todo: todoo,
@@ -87,32 +89,48 @@ class _HomeState extends State<Home> {
                               blurRadius: 10.0,
                               spreadRadius: 0.0)
                         ],
-                        borderRadius: BorderRadius.circular(10)),
+                        borderRadius: BorderRadius.circular(20)),
                     child: TextField(
                         controller: _todoController,
                         decoration: InputDecoration(
-                            hintText: 'Add a new todo item',
+                            hintText: 'Add new task here',
                             border: InputBorder.none)),
                   )),
                   Container(
-                      margin: EdgeInsets.only(
-                        bottom: 20,
-                        right: 20,
-                      ),
-                      child: ElevatedButton(
-                        child: Text(
-                          '+',
-                          style: TextStyle(fontSize: 40),
-                        ),
+                    margin: EdgeInsets.only(
+                      bottom: 20,
+                      right: 20,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.black,
+                    ),
+                    // child: ElevatedButton(
+                    //   child: Text(
+                    //     '+',
+                    //     style: TextStyle(fontSize: 40),
+                    //   ),
+                    //   onPressed: (() {
+                    //     _addToDoItem(_todoController.text);
+                    //   }),
+                    //   style: ElevatedButton.styleFrom(
+                    //     primary: tdBlue,
+                    //     shape: OutlinedBorder.,
+                    //     minimumSize: Size(60, 60),
+                    //     elevation: 10,
+                    //   ),
+                    // )
+                    child: IconButton(
+                        icon: Icon(Icons.add),
                         onPressed: (() {
-                          _addToDoItem(_todoController.text);
+                          if (_todoController.text == "") {
+                          } else {
+                            _addToDoItem(_todoController.text);
+                          }
                         }),
-                        style: ElevatedButton.styleFrom(
-                          primary: tdBlue,
-                          minimumSize: Size(60, 60),
-                          elevation: 10,
-                        ),
-                      ))
+                        iconSize: 45,
+                        color: Colors.white),
+                  )
                 ],
               )),
         ],
@@ -132,11 +150,16 @@ class _HomeState extends State<Home> {
             color: tdBlack,
             size: 30,
           ),
+          Text(
+            'Todo List',
+            style: TextStyle(
+                fontSize: 30, fontWeight: FontWeight.w500, color: Colors.black),
+          ),
           Container(
             height: 40,
             width: 40,
             child: ClipRRect(
-                child: Image.asset('assets/images/picture.jpg'),
+                child: Image.asset('assets/images/Profile2.jpg'),
                 borderRadius: BorderRadius.circular(20)),
           )
         ],
@@ -147,6 +170,7 @@ class _HomeState extends State<Home> {
   void _handleToDoChange(ToDo todo) {
     setState(() {
       todo.isDone = !todo.isDone;
+       todosList.indexWhere((element) => element.id == todo.id);
     });
   }
 
@@ -183,19 +207,24 @@ class _HomeState extends State<Home> {
 
   Widget searchBox() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 15),
+      margin: EdgeInsets.only(top: 10, bottom: 50),
+      padding: EdgeInsets.symmetric(horizontal: 25, vertical: 6),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20), color: Colors.white),
+          borderRadius: BorderRadius.circular(30), color: Colors.white),
       child: TextField(
         onChanged: (value) => {_runFileredResult(value)},
         decoration: InputDecoration(
-            contentPadding: EdgeInsets.all(0),
-            prefixIcon: Icon(
+            contentPadding: EdgeInsets.only(
+              top: 15,
+              bottom: 15,
+              left: 5,
+            ),
+            suffixIcon: Icon(
               Icons.search,
               color: tdBlack,
-              size: 20,
+              size: 25,
             ),
-            prefixIconConstraints: BoxConstraints(maxHeight: 20, maxWidth: 25),
+            suffixIconConstraints: BoxConstraints(maxHeight: 25, maxWidth: 25),
             border: InputBorder.none,
             hintText: 'Search',
             hintStyle: TextStyle(color: tdGrey)),
