@@ -4,7 +4,6 @@ import '../model/todo.dart';
 import '../widgets/todo_item.dart';
 
 class Home extends StatefulWidget {
-
   const Home({Key? key}) : super(key: key);
 
   @override
@@ -13,6 +12,8 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final todosList = ToDo.todoList();
+  // List<ToDo> filter
+  final _todoController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +38,12 @@ class _HomeState extends State<Home> {
                             fontSize: 30, fontWeight: FontWeight.w500),
                       ),
                     ),
-                    for (ToDo todoo in todosList) ToDoItem(todo: todoo)
+                    for (ToDo todoo in todosList)
+                      ToDoItem(
+                        todo: todoo,
+                        onDeleteItem: _deleteToDoItem,
+                        onToDoChanged: _handleToDoChange,
+                      )
                   ],
                 ))
               ],
@@ -66,6 +72,7 @@ class _HomeState extends State<Home> {
                         ],
                         borderRadius: BorderRadius.circular(10)),
                     child: TextField(
+                        controller: _todoController,
                         decoration: InputDecoration(
                             hintText: 'Add a new todo item',
                             border: InputBorder.none)),
@@ -80,7 +87,9 @@ class _HomeState extends State<Home> {
                           '+',
                           style: TextStyle(fontSize: 40),
                         ),
-                        onPressed: (() {}),
+                        onPressed: (() {
+                          _addToDoItem(_todoController.text);
+                        }),
                         style: ElevatedButton.styleFrom(
                           primary: tdBlue,
                           minimumSize: Size(60, 60),
@@ -117,15 +126,29 @@ class _HomeState extends State<Home> {
       ),
     );
   }
-}
 
-class searchBox extends StatelessWidget {
-  const searchBox({
-    Key? key,
-  }) : super(key: key);
+  void _handleToDoChange(ToDo todo) {
+    setState(() {
+      todo.isDone = !todo.isDone;
+    });
+  }
 
-  @override
-  Widget build(BuildContext context) {
+  void _deleteToDoItem(String id) {
+    setState(() {
+      todosList.removeWhere((element) => element.id == id);
+    });
+  }
+
+  void _addToDoItem(String tdItem) {
+    setState(() {
+      todosList.add(ToDo(
+          id: DateTime.now().millisecondsSinceEpoch.toString(),
+          todoText: tdItem));
+    });
+    _todoController.clear();
+  }
+
+  Widget searchBox() {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 15),
       decoration: BoxDecoration(
@@ -146,3 +169,34 @@ class searchBox extends StatelessWidget {
     );
   }
 }
+
+
+
+
+// class searchBox extends StatelessWidget {
+//   const searchBox({
+//     Key? key,
+//   }) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       padding: EdgeInsets.symmetric(horizontal: 15),
+//       decoration: BoxDecoration(
+//           borderRadius: BorderRadius.circular(20), color: Colors.white),
+//       child: TextField(
+//         decoration: InputDecoration(
+//             contentPadding: EdgeInsets.all(0),
+//             prefixIcon: Icon(
+//               Icons.search,
+//               color: tdBlack,
+//               size: 20,
+//             ),
+//             prefixIconConstraints: BoxConstraints(maxHeight: 20, maxWidth: 25),
+//             border: InputBorder.none,
+//             hintText: 'Search',
+//             hintStyle: TextStyle(color: tdGrey)),
+//       ),
+//     );
+//   }
+// }
