@@ -3,6 +3,16 @@ import '../constants/colors.dart';
 import '../model/todo.dart';
 import '../widgets/todo_item.dart';
 
+/*
+***Functionality to add
+
+-Color of selected Item should change color
+-THe last item is not visible when list is full
+- send selected item to the bottom
+- allow to hide selected item
+- change picture
+*/
+
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
 
@@ -12,12 +22,12 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final todosList = ToDo.todoList();
-  List<ToDo> filteredTDList = [];
+  List<ToDo> _filteredTDList = [];
   final _todoController = TextEditingController();
 
   @override
   void initState() {
-    filteredTDList = todosList;
+    _filteredTDList = todosList;
     super.initState();
   }
 
@@ -44,7 +54,7 @@ class _HomeState extends State<Home> {
                             fontSize: 30, fontWeight: FontWeight.w500),
                       ),
                     ),
-                    for (ToDo todoo in filteredTDList.reversed)
+                    for (ToDo todoo in _filteredTDList.reversed)
                       ToDoItem(
                         todo: todoo,
                         onDeleteItem: _deleteToDoItem,
@@ -154,19 +164,19 @@ class _HomeState extends State<Home> {
     _todoController.clear();
   }
 
-  void _fileredResult(String keyword) {
-    setState(() {
-      List<ToDo> results = [];
+  void _runFileredResult(String keyword) {
+    List<ToDo> results = [];
 
-      if (keyword == '') {
-        results = todosList;
-      } else {
-        results = todosList
-            .where((element) =>
-                element.todoText!.toLowerCase().contains(keyword.toLowerCase()))
-            .toList();
-      }
-      filteredTDList = results;
+    if (keyword.isEmpty) {
+      results = todosList;
+    } else {
+      results = todosList
+          .where((element) =>
+              element.todoText!.toLowerCase().contains(keyword.toLowerCase()))
+          .toList();
+    }
+    setState(() {
+      _filteredTDList = results;
     });
   }
 
@@ -176,7 +186,7 @@ class _HomeState extends State<Home> {
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20), color: Colors.white),
       child: TextField(
-        onChanged: (value) => {_fileredResult(value)},
+        onChanged: (value) => {_runFileredResult(value)},
         decoration: InputDecoration(
             contentPadding: EdgeInsets.all(0),
             prefixIcon: Icon(
